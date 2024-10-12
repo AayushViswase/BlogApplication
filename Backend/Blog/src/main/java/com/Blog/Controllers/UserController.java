@@ -48,4 +48,10 @@ public class UserController {
 	public ResponseEntity<List<UserDto>> getAllUsers() {
 		return ResponseEntity.ok(this.userService.getAllUsers());
 	}
+
+	@GetMapping("/{userId}")
+	public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
+		UserDto user=this.userService.getUserById(userId)	;
+		return new ResponseEntity<UserDto>(user, HttpStatus.OK);
+	}
 }

@@ -11,9 +11,21 @@ public class ResourceNotFoundException extends RuntimeException {
 	Long fieldValue;
 
 	public ResourceNotFoundException(String resourceName, String fieldName, Long fieldValue) {
-		super(String.format("%s not found %s : %1", resourceName, fieldName, fieldValue));
+		super(String.format("%s not found %s : %s", resourceName, fieldName, fieldValue));
 		this.resourceName = resourceName;
 		this.fieldName = fieldName;
 		this.fieldValue = fieldValue;
 	}
+}
+public class RecordsNotFoundException extends Exception {
+
+	public RecordsNotFoundException() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public RecordsNotFoundException(String message) {
+		super(message);
+		// TODO Auto-generated constructor stub
+	}
+
 }
