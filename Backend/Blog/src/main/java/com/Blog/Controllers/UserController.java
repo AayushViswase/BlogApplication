@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Blog.Payload.UserDto;
+import com.Blog.Model.User;
+import com.Blog.Payload.Request.UserRequest;
 import com.Blog.Services.UserService;
 
 @RestController
@@ -26,32 +28,33 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<UserRequest> createUser(@RequestBody UserRequest userRequest) {
 
-		UserDto createUserDto = this.userService.createUser(userDto);
-		return new ResponseEntity<UserDto>(createUserDto, HttpStatus.CREATED);
+		UserRequest createUserDto = this.userService.createUser(userRequest);
+		return new ResponseEntity<UserRequest>(createUserDto, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{userId}")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
-		UserDto updatedUser = this.userService.updateUser(userDto, userId);
+	public ResponseEntity<UserRequest> updateUser(@RequestBody UserRequest userRequest, @PathVariable Long userId)
+			throws NotFoundException {
+		UserRequest updatedUser = this.userService.updateUser(userRequest, userId);
 		return ResponseEntity.ok(updatedUser);
 	}
 
 	@DeleteMapping("/{userId}")
-	public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long userId) {
+	public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long userId) throws NotFoundException {
 		this.userService.deleteUser(userId);
 		return new ResponseEntity<Map<String, String>>(Map.of("message", "User Deleted Sussesfully"), HttpStatus.OK);
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<List<UserDto>> getAllUsers() {
+	public ResponseEntity<List<User>> getAllUsers() {
 		return ResponseEntity.ok(this.userService.getAllUsers());
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
-		UserDto user=this.userService.getUserById(userId)	;
-		return new ResponseEntity<UserDto>(user, HttpStatus.OK);
+	public ResponseEntity<User> getUserById(@PathVariable Long userId) throws NotFoundException {
+		User user = this.userService.getUserById(userId);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 }

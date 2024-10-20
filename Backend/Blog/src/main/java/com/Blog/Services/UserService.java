@@ -2,16 +2,19 @@ package com.Blog.Services;
 
 import java.util.List;
 
-import com.Blog.Payload.UserDto;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+
+import com.Blog.Model.User;
+import com.Blog.Payload.Request.UserRequest;
 
 public interface UserService {
-	UserDto createUser(UserDto user);
+	UserRequest createUser(UserRequest user);
 
-	UserDto updateUser(UserDto user, Long userId);
+	UserRequest updateUser(UserRequest user, Long userId) throws NotFoundException;
 
-	UserDto getUserById(Long userID);
+	User getUserById(Long userID) throws NotFoundException;
 
-	List<UserDto> getAllUsers();
+	List<User> getAllUsers();
 
-	void deleteUser(Long userID);
+	void deleteUser(Long userID) throws NotFoundException;
 }
