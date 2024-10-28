@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Blog.Model.User;
 import com.Blog.Payload.Request.UserRequest;
+import com.Blog.Payload.Response.UserResponse;
 import com.Blog.Services.UserService;
 
 @RestController
@@ -28,16 +28,15 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/")
-	public ResponseEntity<UserRequest> createUser(@RequestBody UserRequest userRequest) {
-
-		UserRequest createUserDto = this.userService.createUser(userRequest);
-		return new ResponseEntity<UserRequest>(createUserDto, HttpStatus.CREATED);
+	public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+		UserResponse createUserDto = this.userService.createUser(userRequest);
+		return new ResponseEntity<UserResponse>(createUserDto, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{userId}")
-	public ResponseEntity<UserRequest> updateUser(@RequestBody UserRequest userRequest, @PathVariable Long userId)
+	public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest, @PathVariable Long userId)
 			throws NotFoundException {
-		UserRequest updatedUser = this.userService.updateUser(userRequest, userId);
+		UserResponse updatedUser = this.userService.updateUser(userRequest, userId);
 		return ResponseEntity.ok(updatedUser);
 	}
 
@@ -48,13 +47,12 @@ public class UserController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<List<User>> getAllUsers() {
+	public ResponseEntity<List<UserResponse>> getAllUsers() {
 		return ResponseEntity.ok(this.userService.getAllUsers());
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<User> getUserById(@PathVariable Long userId) throws NotFoundException {
-		User user = this.userService.getUserById(userId);
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+	public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) throws NotFoundException {
+		return ResponseEntity.ok(this.userService.getUserById(userId));
 	}
 }

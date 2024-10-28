@@ -2,17 +2,17 @@ package com.Blog.Services;
 
 import java.util.List;
 
-import com.Blog.Model.Category;
 import com.Blog.Payload.Request.CategoryRequest;
+import com.Blog.Payload.Response.CategoryResponse;
 
 public interface CategoryService {
-	CategoryRequest createCategory(CategoryRequest request);
+	CategoryResponse createCategory(CategoryRequest request);
 
-	CategoryRequest updateCategory(CategoryRequest request, Long categoryId);
+	CategoryResponse updateCategory(CategoryRequest request, Long categoryId);
 
-	Category getCategoryById(Long categoryId);
+	CategoryResponse getCategoryById(Long categoryId);
 
-	List<Category> getAllCategories();
+	List<CategoryResponse> getAllCategories();
 
 	void deleteCategory(Long categoryId);
 }

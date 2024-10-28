@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.Blog.Exceptions.ResourceNotFoundException;
 import com.Blog.Model.User;
 import com.Blog.Payload.Request.UserRequest;
+import com.Blog.Payload.Response.UserResponse;
 import com.Blog.Repositories.UserRepository;
 
 @Service
@@ -23,14 +24,14 @@ public class UserServiceImpl implements UserService {
 	private ModelMapper mapper;
 
 	@Override
-	public UserRequest createUser(UserRequest userRequest) {
+	public UserResponse createUser(UserRequest userRequest) {
 		User user = this.mapper.map(userRequest, User.class);
 		User savedUser= this.userRepository.save(user);
-		return this.mapper.map(savedUser, UserRequest.class);
+		return this.mapper.map(savedUser, UserResponse.class);
 	}
 
 	@Override
-	public UserRequest updateUser(UserRequest userRequest, Long userId) {
+	public UserResponse updateUser(UserRequest userRequest, Long userId) {
 		User existingUser = this.userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
@@ -39,21 +40,21 @@ public class UserServiceImpl implements UserService {
 		existingUser.setPassword(userRequest.getPassword());
 		existingUser.setAbout(userRequest.getAbout());
 		User updatedUser = this.userRepository.save(existingUser);
-		return this.mapper.map(updatedUser, UserRequest.class);
+		return this.mapper.map(updatedUser, UserResponse.class);
 	}
 
 
 	@Override
-	public User getUserById(Long userId) throws NotFoundException {
+	public UserResponse getUserById(Long userId) throws NotFoundException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-		return user;
+		return this.mapper.map(user, UserResponse.class);
 	}
 
 	@Override
-	public List<User> getAllUsers() {
+	public List<UserResponse> getAllUsers() {
 		List<User> users=this.userRepository.findAll();
-		List<User> usersList = users.stream().map(user -> this.mapper.map(user, User.class))
+		List<UserResponse> usersList = users.stream().map(user -> this.mapper.map(user, UserResponse.class))
 				.collect(Collectors.toList());
 		return usersList;
 	}

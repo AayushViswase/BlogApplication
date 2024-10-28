@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.Blog.Exceptions.ResourceNotFoundException;
 import com.Blog.Model.Category;
 import com.Blog.Payload.Request.CategoryRequest;
+import com.Blog.Payload.Response.CategoryResponse;
 import com.Blog.Repositories.CategoryRepository;
 
 @Service
@@ -20,33 +21,34 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	@Override
-	public CategoryRequest createCategory(CategoryRequest request) {
+	public CategoryResponse createCategory(CategoryRequest request) {
 		Category category = this.mapper.map(request, Category.class);
 		Category saveCategory = this.categoryRepository.save(category);
-		return this.mapper.map(saveCategory, CategoryRequest.class);
+		return this.mapper.map(saveCategory, CategoryResponse.class);
 	}
 
 	@Override
-	public CategoryRequest updateCategory(CategoryRequest request, Long categoryId) {
+	public CategoryResponse updateCategory(CategoryRequest request, Long categoryId) {
 		Category existingCategory = this.categoryRepository.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Categoty", "Id", categoryId));
 		existingCategory.setCategoryTitle(request.getCategoryTitle());
 		existingCategory.setCategoryDescription(request.getCategoryDescription());
 		Category updatedCategory = this.categoryRepository.save(existingCategory);
-		return this.mapper.map(updatedCategory, CategoryRequest.class);
+		return this.mapper.map(updatedCategory, CategoryResponse.class);
 	}
 
 	@Override
-	public Category getCategoryById(Long categoryId) {
+	public CategoryResponse getCategoryById(Long categoryId) {
 		Category existingCategory = this.categoryRepository.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", categoryId));
-		return existingCategory;
+		return this.mapper.map(existingCategory, CategoryResponse.class);
 	}
 
 	@Override
-	public List<Category> getAllCategories() {
+	public List<CategoryResponse> getAllCategories() {
 		List<Category> categories = this.categoryRepository.findAll();
-		List<Category> categoryList = categories.stream().map(category -> this.mapper.map(category, Category.class))
+		List<CategoryResponse> categoryList = categories.stream()
+				.map(category -> this.mapper.map(category, CategoryResponse.class))
 				.collect(Collectors.toList());
 		return categoryList;
 	}
