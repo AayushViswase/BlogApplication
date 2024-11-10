@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostResponse {
-
+	private Long postId;
 	private String title;
 	private String content;
 	private String imageName;

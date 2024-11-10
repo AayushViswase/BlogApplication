@@ -1,10 +1,13 @@
 package com.Blog.Controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,9 +38,28 @@ public class PostController {
 		return new ResponseEntity<List<PostResponse>>(posts, HttpStatus.OK);
 	}
 
-	//	@GetMapping("/user/{userId}/posts")
-	//	public ResponseEntity<List<PostResponse>> getPostsbyCategory(@PathVariable Long userId) {
-	//		List<PostResponse> posts = this.postService.getPostByCategory(userId);
-	//		return new ResponseEntity<List<PostResponse>>(posts, HttpStatus.OK);
-	//	}
+	@GetMapping("/category/{categoryId}/posts")
+	public ResponseEntity<List<PostResponse>> getPostsbyCategory(@PathVariable Long categoryId) {
+		List<PostResponse> posts = this.postService.getPostByCategory(categoryId);
+		return new ResponseEntity<List<PostResponse>>(posts, HttpStatus.OK);
+	}
+
+	@GetMapping("/post/{postId}")
+	public ResponseEntity<PostResponse> getPostsbyId(@PathVariable Long postId) {
+		PostResponse postResponse = this.postService.getPostById(postId);
+		return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/posts")
+	public ResponseEntity<List<PostResponse>> getAllPosts() {
+		List<PostResponse> posts = this.postService.getAllPost();
+		return new ResponseEntity<List<PostResponse>>(posts, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/post/{postId}")
+	public ResponseEntity<Map<String, String>> deletePost(@PathVariable Long postId) throws NotFoundException {
+		this.postService.deletePost(postId);
+		return new ResponseEntity<Map<String, String>>(Map.of("message", "Category Deleted Sussesfully"), HttpStatus.OK);
+	}
+
 }
