@@ -1,8 +1,7 @@
 package com.Blog.Services;
 
-import java.util.List;
-
 import com.Blog.Payload.Request.CategoryRequest;
+import com.Blog.Payload.Response.CategoryPageResponse;
 import com.Blog.Payload.Response.CategoryResponse;
 
 public interface CategoryService {
@@ -12,7 +11,7 @@ public interface CategoryService {
 
 	CategoryResponse getCategoryById(Long categoryId);
 
-	List<CategoryResponse> getAllCategories();
+	CategoryPageResponse getAllCategories(Integer pageNumber, Integer pageSize);
 
 	void deleteCategory(Long categoryId);
 }

@@ -1,6 +1,5 @@
 package com.Blog.Controllers;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Blog.Payload.Request.UserRequest;
+import com.Blog.Payload.Response.UserPageResponse;
 import com.Blog.Payload.Response.UserResponse;
 import com.Blog.Services.UserService;
 
@@ -47,9 +48,13 @@ public class UserController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<List<UserResponse>> getAllUsers() {
-		return ResponseEntity.ok(this.userService.getAllUsers());
+	public ResponseEntity<UserPageResponse> getAllUsers(
+			@RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+		UserPageResponse users = this.userService.getAllUsers(pageNumber, pageSize);
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
+
 
 	@GetMapping("/{userId}")
 	public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) throws NotFoundException {

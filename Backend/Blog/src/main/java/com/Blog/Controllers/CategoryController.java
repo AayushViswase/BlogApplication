@@ -1,6 +1,5 @@
 package com.Blog.Controllers;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -16,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Blog.Payload.Request.CategoryRequest;
+import com.Blog.Payload.Response.CategoryPageResponse;
 import com.Blog.Payload.Response.CategoryResponse;
 import com.Blog.Services.CategoryService;
 
@@ -49,8 +50,11 @@ public class CategoryController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<List<CategoryResponse>> getAllCategory() {
-		return ResponseEntity.ok(this.categoryService.getAllCategories());
+	public ResponseEntity<CategoryPageResponse> getAllCategories(
+			@RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+		CategoryPageResponse categories = this.categoryService.getAllCategories(pageNumber, pageSize);
+		return new ResponseEntity<>(categories, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{categoryId}")

@@ -1,10 +1,9 @@
 package com.Blog.Services;
 
-import java.util.List;
-
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 import com.Blog.Payload.Request.UserRequest;
+import com.Blog.Payload.Response.UserPageResponse;
 import com.Blog.Payload.Response.UserResponse;
 
 public interface UserService {
@@ -14,7 +13,7 @@ public interface UserService {
 
 	UserResponse getUserById(Long userID) throws NotFoundException;
 
-	List<UserResponse> getAllUsers();
+	UserPageResponse getAllUsers(Integer pageNumber, Integer pageSize);
 
 	void deleteUser(Long userID) throws NotFoundException;
 }

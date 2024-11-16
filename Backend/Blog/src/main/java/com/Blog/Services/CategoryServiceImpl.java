@@ -5,11 +5,15 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.Blog.Exceptions.ResourceNotFoundException;
 import com.Blog.Model.Category;
 import com.Blog.Payload.Request.CategoryRequest;
+import com.Blog.Payload.Response.CategoryPageResponse;
 import com.Blog.Payload.Response.CategoryResponse;
 import com.Blog.Repositories.CategoryRepository;
 
@@ -45,13 +49,25 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryResponse> getAllCategories() {
-		List<Category> categories = this.categoryRepository.findAll();
-		List<CategoryResponse> categoryList = categories.stream()
-				.map(category -> this.mapper.map(category, CategoryResponse.class))
-				.collect(Collectors.toList());
-		return categoryList;
+	public CategoryPageResponse getAllCategories(Integer pageNumber, Integer pageSize) {
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<Category> pageCategory = this.categoryRepository.findAll(pageable);
+		List<Category> allCategories = pageCategory.getContent();
+
+		List<CategoryResponse> list = allCategories.stream()
+				.map(category -> this.mapper.map(category, CategoryResponse.class)).collect(Collectors.toList());
+
+		CategoryPageResponse categoryPageResponse = new CategoryPageResponse();
+		categoryPageResponse.setContent(list);
+		categoryPageResponse.setPageNumber(pageCategory.getNumber());
+		categoryPageResponse.setPageSize(pageCategory.getSize());
+		categoryPageResponse.setTotalElements(pageCategory.getTotalElements());
+		categoryPageResponse.setTotalPages(pageCategory.getTotalPages());
+		categoryPageResponse.setLastPage(pageCategory.isLast());
+
+		return categoryPageResponse;
 	}
+
 
 	@Override
 	public void deleteCategory(Long categoryId) {
