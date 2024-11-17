@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.Blog.Exceptions.ResourceNotFoundException;
@@ -74,8 +75,8 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public PostPageResponse getAllPost(Integer pageNumber, Integer pageSize) {
-		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+	public PostPageResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy) {
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
 		Page<Post> pagePost = this.postRepository.findAll(pageable);
 		List<Post> allPost = pagePost.getContent();
 
@@ -122,9 +123,11 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public List<PostResponse> searchPost(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Post> posts= this.postRepository.findByTitleContaining(keyword);
+		return posts.stream().map(post -> this.mapper.map(post, PostResponse.class))
+				.collect(Collectors.toList());
 	}
 
 }

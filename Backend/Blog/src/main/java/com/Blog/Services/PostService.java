@@ -13,7 +13,7 @@ public interface PostService {
 
 	void deletePost(Long postId);
 
-	PostPageResponse getAllPost(Integer pageNumber, Integer pageSize);
+	PostPageResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy);
 
 	PostResponse getPostById(Long postId);
 

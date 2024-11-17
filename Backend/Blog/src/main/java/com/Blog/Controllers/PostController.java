@@ -55,8 +55,9 @@ public class PostController {
 	@GetMapping("/posts")
 	public ResponseEntity<PostPageResponse> getAllPosts(
 			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize) {
-		PostPageResponse posts = this.postService.getAllPost(pageNumber, pageSize);
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy) {
+		PostPageResponse posts = this.postService.getAllPost(pageNumber, pageSize, sortBy);
 		return new ResponseEntity<PostPageResponse>(posts, HttpStatus.OK);
 	}
 
@@ -65,6 +66,13 @@ public class PostController {
 		this.postService.deletePost(postId);
 		return new ResponseEntity<Map<String, String>>(Map.of("message", "Category Deleted Sussesfully"),
 				HttpStatus.OK);
+	}
+
+	@GetMapping("/posts/search/{keyword}")
+	public ResponseEntity<List<PostResponse>> searchPostByTitle(@PathVariable String keyword) {
+		List<PostResponse> result = this.postService.searchPost(keyword);
+		return new ResponseEntity<List<PostResponse>>(result, HttpStatus.OK);
+
 	}
 
 }
