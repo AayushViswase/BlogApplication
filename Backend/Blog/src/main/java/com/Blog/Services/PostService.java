@@ -9,7 +9,7 @@ import com.Blog.Payload.Response.PostResponse;
 public interface PostService {
 	PostResponse createPost(PostRequest postRequest, Long userId, Long categoryId);
 
-	PostResponse updatePost(PostRequest postRequest, Long postId);
+	PostResponse updatePost(PostResponse postResponse, Long postId);
 
 	void deletePost(Long postId);
 

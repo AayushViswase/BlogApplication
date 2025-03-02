@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
 				.orElseThrow(() -> new ResourceNotFoundException("category", "category id", categoryId));
 
 		Post post = this.mapper.map(postRequest, Post.class);
-		post.setImageName("default.png");
+		//		post.setImageName("default.png");
 		post.setAddedDate(new Date());
 		post.setUser(user);
 		post.setCategory(category);
@@ -56,12 +56,12 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostResponse updatePost(PostRequest postRequest, Long postId) {
+	public PostResponse updatePost(PostResponse postResponse, Long postId) {
 		Post post = this.postRepository.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("Post", "Post id", postId));
-		post.setTitle(postRequest.getTitle());
-		post.setContent(postRequest.getContent());
-		post.setImageName(postRequest.getPostImageName());
+		post.setTitle(postResponse.getTitle());
+		post.setContent(postResponse.getContent());
+		post.setImageName(postResponse.getImageName());
 		this.postRepository.save(post);
 		return this.mapper.map(post, PostResponse.class);
 	}

@@ -1,9 +1,11 @@
 package com.Blog.Controllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.Blog.Payload.Request.PostRequest;
 import com.Blog.Payload.Response.PostPageResponse;
 import com.Blog.Payload.Response.PostResponse;
+import com.Blog.Services.FileService;
 import com.Blog.Services.PostService;
 
 @RestController
@@ -26,6 +30,12 @@ import com.Blog.Services.PostService;
 public class PostController {
 	@Autowired
 	private PostService postService;
+
+	@Autowired
+	private FileService fileService;
+
+	@Value("${project.image}")
+	private String path;
 
 	@PostMapping("/user/{userId}/category/{categoryId}/post")
 	public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest postRequest, @PathVariable Long userId,
@@ -72,7 +82,37 @@ public class PostController {
 	public ResponseEntity<List<PostResponse>> searchPostByTitle(@PathVariable String keyword) {
 		List<PostResponse> result = this.postService.searchPost(keyword);
 		return new ResponseEntity<List<PostResponse>>(result, HttpStatus.OK);
-
 	}
+
+	@PostMapping("post/image/upload/{postId}")
+	public ResponseEntity<PostResponse> uploadImage(@RequestParam("image") MultipartFile image,
+			@PathVariable Long postId) throws IOException {
+		String fileName = this.fileService.uploadImage(path, image);
+		PostResponse postResponse = this.postService.getPostById(postId);
+		postResponse.setImageName(fileName);
+
+		PostResponse updatedPost = this.postService.updatePost(postResponse, postId);
+		return new ResponseEntity<PostResponse>(updatedPost, HttpStatus.OK);
+	}
+
+	//	@PostMapping("post/image/upload/{postId}")
+	//	public ResponseEntity<PostResponse> uploadImage(@RequestParam("image") MultipartFile image,
+	//			@PathVariable Long postId) throws IOException {
+	//
+	//		String fileName = this.fileService.uploadImage(path, image);
+	//		Post post = this.postService.findById(postId)
+	//				.orElseThrow(() -> new ResourceNotFoundException("Post", "Post id", postId));
+	//
+	//		post.setImageName(fileName);
+	//		Post updatedPost = this.postRepository.save(post);
+	//
+	//		// Ensure category and user are loaded before mapping
+	//		updatedPost.getCategory().getTitle(); // Forces initialization
+	//		updatedPost.getUser().getName(); // Forces initialization
+	//
+	//		PostResponse response = this.mapper.map(updatedPost, PostResponse.class);
+	//		return new ResponseEntity<>(response, HttpStatus.OK);
+	//	}
+
 
 }

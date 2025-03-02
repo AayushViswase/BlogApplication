@@ -34,12 +34,13 @@ public class Post {
 	private String imageName;
 	private Date addedDate;
 	@JsonManagedReference
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id")
 	private Category category;
 	@JsonManagedReference
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
+
 
 }
