@@ -1,14 +1,19 @@
 package com.Blog.Controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,24 +100,10 @@ public class PostController {
 		return new ResponseEntity<PostResponse>(updatedPost, HttpStatus.OK);
 	}
 
-	//	@PostMapping("post/image/upload/{postId}")
-	//	public ResponseEntity<PostResponse> uploadImage(@RequestParam("image") MultipartFile image,
-	//			@PathVariable Long postId) throws IOException {
-	//
-	//		String fileName = this.fileService.uploadImage(path, image);
-	//		Post post = this.postService.findById(postId)
-	//				.orElseThrow(() -> new ResourceNotFoundException("Post", "Post id", postId));
-	//
-	//		post.setImageName(fileName);
-	//		Post updatedPost = this.postRepository.save(post);
-	//
-	//		// Ensure category and user are loaded before mapping
-	//		updatedPost.getCategory().getTitle(); // Forces initialization
-	//		updatedPost.getUser().getName(); // Forces initialization
-	//
-	//		PostResponse response = this.mapper.map(updatedPost, PostResponse.class);
-	//		return new ResponseEntity<>(response, HttpStatus.OK);
-	//	}
-
-
+	@GetMapping(value = "post/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
+		InputStream resource = this.fileService.getResources(path, imageName);
+		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+		StreamUtils.copy(resource, response.getOutputStream());
+	}
 }
