@@ -1,6 +1,7 @@
 package com.Blog.Payload.Response;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,4 +18,5 @@ public class PostResponse {
 	private Date addedDate;
 	private CategoryResponse category;
 	private UserResponse user;
+	private List<CommentResponse> comments;
 }

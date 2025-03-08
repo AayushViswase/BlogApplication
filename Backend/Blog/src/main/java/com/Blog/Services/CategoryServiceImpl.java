@@ -3,6 +3,8 @@ package com.Blog.Services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional
 	public CategoryPageResponse getAllCategories(Integer pageNumber, Integer pageSize) {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		Page<Category> pageCategory = this.categoryRepository.findAll(pageable);

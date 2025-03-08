@@ -99,7 +99,9 @@ public class PostServiceImpl implements PostService {
 	public PostResponse getPostById(Long postId) {
 		Post post = this.postRepository.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("Post", "Post id", postId));
-		return this.mapper.map(post, PostResponse.class);
+		//		System.out.print(post);
+		PostResponse postResponse = this.mapper.map(post, PostResponse.class);
+		return postResponse;
 	}
 
 	@Override
