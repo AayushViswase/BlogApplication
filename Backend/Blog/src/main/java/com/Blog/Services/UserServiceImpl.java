@@ -3,6 +3,8 @@ package com.Blog.Services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
 	private ModelMapper mapper;
 
 	@Override
+	@Transactional
 	public UserResponse createUser(UserRequest userRequest) {
 		User user = this.mapper.map(userRequest, User.class);
 		User savedUser= this.userRepository.save(user);
@@ -35,6 +38,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
+
 	public UserResponse updateUser(UserRequest userRequest, Long userId) {
 		User existingUser = this.userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
@@ -49,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
+	@Transactional
 	public UserResponse getUserById(Long userId) throws NotFoundException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
@@ -56,6 +62,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public UserPageResponse getAllUsers(Integer pageNumber, Integer pageSize) {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		Page<User> pageUser = this.userRepository.findAll(pageable);
@@ -78,6 +85,7 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
+	@Transactional
 	public void deleteUser(Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
