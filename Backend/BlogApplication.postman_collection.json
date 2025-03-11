@@ -1,0 +1,1324 @@
+{
+	"info": {
+		"_postman_id": "46753e41-ef31-4096-8450-48bdedfea6e7",
+		"name": "BlogApplication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31562907"
+	},
+	"item": [
+		{
+			"name": "create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains the userId\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"userId\");\r",
+							"    pm.environment.set(\"userId\", jsonData.userId);   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Name and email match\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"carol_bake1r\");\r",
+							"    pm.expect(jsonData.email).to.eql(\"carol.baker@eqwwqxample.com\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"name\": \"carol_bake1r\",\r\n    \"email\": \"carol.baker@eqwwqxample.com\",\r\n    \"password\": \"carolPass\",\r\n    \"about\": \"UI/UX designer with a love for creating beautiful and functional interfaces.\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get All Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains an array of users\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each user object contains required properties\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    jsonData.forEach(user => {\r",
+							"        pm.expect(user).to.have.property(\"userId\").that.is.a(\"number\");\r",
+							"        pm.expect(user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"        pm.expect(user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"        pm.expect(user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"        pm.expect(user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Check specific user data\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const specificUserId = pm.environment.get(\"userId\"); // Get userId from environment\r",
+							"    const specificUser = jsonData.find(user => user.userId === specificUserId);\r",
+							"    pm.expect(specificUser).to.not.be.undefined;\r",
+							"    pm.expect(specificUser.name).to.eql(\"carol_bake1r\");\r",
+							"    pm.expect(specificUser.email).to.eql(\"carol.baker@eqwwqxample.com\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update User by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains updated user details\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(jsonData.name).to.eql(\"updated_carol_bake1r\");\r",
+							"    pm.expect(jsonData.email).to.eql(\"updated.carol.baker@example.com\");\r",
+							"    pm.expect(jsonData.about).to.eql(\"UI/UX designer with a passion for responsive designs.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has necessary properties\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"userId\").that.is.a(\"number\");\r",
+							"    pm.expect(jsonData).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(jsonData).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(jsonData).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(jsonData).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"updated_carol_bake1r\",\r\n    \"email\": \"updated.carol.baker@example.com\",\r\n    \"password\": \"newCarol\",\r\n    \"about\": \"UI/UX designer with a passion for responsive designs.\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Users by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains updated user details\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(jsonData.name).to.eql(\"updated_carol_bake1r\");\r",
+							"    pm.expect(jsonData.email).to.eql(\"updated.carol.baker@example.com\");\r",
+							"    pm.expect(jsonData.about).to.eql(\"UI/UX designer with a passion for responsive designs.\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create Category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Test if the response has the expected fields\r",
+							"pm.test(\"Response contains categoryId\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"categoryId\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains categoryTitle\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"categoryTitle\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains categoryDescription\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"categoryDescription\");\r",
+							"});\r",
+							"\r",
+							"// Store the categoryId in the environment\r",
+							"pm.environment.set(\"categoryId\", responseData.categoryId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoryTitle\": \"Education\",\r\n    \"categoryDescription\": \"Insights and resources for learning and academic success.\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/category/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"category",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update Category by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response (if the API returns the updated object in the response)\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Test if the response contains the updated fields\r",
+							"pm.test(\"Response contains updated categoryTitle\", function () {\r",
+							"    pm.expect(responseData.categoryTitle).to.equal(\"Updated Title\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains updated categoryDescription\", function () {\r",
+							"    pm.expect(responseData.categoryDescription).to.equal(\"Updated description with new insights.\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoryTitle\": \"Updated Title\",\r\n    \"categoryDescription\": \"Updated description with new insights.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/category/{{categoryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"category",
+						"{{categoryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get All Categories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"    pm.expect(responseData).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"const expectedCategoryId = pm.environment.get(\"categoryId\");\r",
+							"const categoryIds = responseData.map(category => category.categoryId);\r",
+							"\r",
+							"pm.test(`Category ID ${expectedCategoryId} is present in the array`, function () {\r",
+							"    pm.expect(categoryIds).to.include(expectedCategoryId);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/category/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"category",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get category by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response contains categoryTitle\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"categoryTitle\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains categoryDescription\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"categoryDescription\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/category/{{categoryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"category",
+						"{{categoryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"postId\", responseData.postId);\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"category\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"user\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Exploring the Future of AI in Education\",\r\n    \"content\": \"Artificial intelligence is revolutionizing the education sector.\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/{{userId}}/category/{{categoryId}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userId}}",
+						"category",
+						"{{categoryId}}",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\":\"this is first comment\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/comments/post/{{postId}}/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"comments",
+						"post",
+						"{{postId}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Posts by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"category\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"user\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has comment object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"comments\").that.is.an(\"array\").with.length.above(0);\r",
+							"    pm.expect(responseData.comments[0]).to.have.property(\"content\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/post/{{postId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"post",
+						"{{postId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Posts by Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"category\");\r",
+							"    pm.expect(responseData[0].category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData[0].category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"user\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/{{userId}}/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userId}}",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Posts by Category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"category\");\r",
+							"    pm.expect(responseData[0].category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData[0].category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData[0]).to.have.property(\"user\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData[0].user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/category/{{categoryId}}/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"category",
+						"{{categoryId}}",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search Posts by keyword",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"category\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"user\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/post/search/{keyword}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"post",
+						"search",
+						"{keyword}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postimage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"category\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"user\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/post/search/{keyword}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"post",
+						"search",
+						"{keyword}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"    pm.environment.set('imageName',responseData.imageName )\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"category\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"user\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Aayush/Afcat/Passport_Photograph.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/post/image/upload/{{postId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"post",
+						"image",
+						"upload",
+						"{{postId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getImage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test if the status code is 201 (created) or 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the JSON response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"// Verify that response contains the expected properties\r",
+							"pm.test(\"Response has title\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"title\").that.equals(\"Exploring the Future of AI in Education\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has content\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"content\").that.equals(\"Artificial intelligence is revolutionizing the education sector.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has imageName\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"imageName\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has addedDate\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"addedDate\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if category object is present and has the correct properties\r",
+							"pm.test(\"Response has category object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"category\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryId\").that.equals(pm.environment.get(\"categoryId\"));\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryTitle\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.category).to.have.property(\"categoryDescription\").that.is.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Check if user object is present and has the correct properties\r",
+							"pm.test(\"Response has user object with correct properties\", function () {\r",
+							"    pm.expect(responseData).to.have.property(\"user\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"userId\").that.equals(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.user).to.have.property(\"name\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"email\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"password\").that.is.a(\"string\");\r",
+							"    pm.expect(responseData.user).to.have.property(\"about\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/post/image/{{imageName}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"post",
+						"image",
+						"{{imageName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete post by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/post/{{postId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"post",
+						"{{postId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete category by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/category/{{categoryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"category",
+						"{{categoryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
