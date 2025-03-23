@@ -1,5 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import userImage from "./assets/image.png";
+import userImage from "../assets/image.png";
 
 const navigation = [
   { name: "Login", href: "/login", current: false },

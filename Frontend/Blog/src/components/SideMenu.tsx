@@ -1,4 +1,5 @@
-import { DoubleArrow, MenuOpen } from "@mui/icons-material";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import { useState } from "react";
 const menuItems = [
   { id: 1, label: "Articles", link: "/about" },
@@ -8,7 +9,7 @@ const menuItems = [
 ];
 
 export default function SideMenu() {
-  const [toggle, setToggle] = useState(true);
+  const [toggle, setToggle] = useState(false);
 
   const handdleToggle = () => {
     setToggle(!toggle);
@@ -25,7 +26,11 @@ export default function SideMenu() {
             className=" absolute right-0 top-1/2 -translate-y-1/2"
             onClick={handdleToggle}
           >
-            {toggle ? <MenuOpen /> : <DoubleArrow className="rotate-180" />}
+            {toggle ? (
+              <MenuOpenIcon />
+            ) : (
+              <DoubleArrowIcon className="rotate-180" />
+            )}
           </button>
         </div>
       </div>
