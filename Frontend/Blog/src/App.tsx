@@ -1,7 +1,10 @@
-import About from "./About";
-
+import SideMenu from "./SideMenu";
 function App() {
-  return <About />;
+  return (
+    <>
+      <SideMenu />
+    </>
+  );
 }
 
 export default App;
