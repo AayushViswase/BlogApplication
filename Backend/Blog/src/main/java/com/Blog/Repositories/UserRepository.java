@@ -6,4 +6,5 @@ import com.Blog.Model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    User findByNameAndPassword(String username, String password);
 }

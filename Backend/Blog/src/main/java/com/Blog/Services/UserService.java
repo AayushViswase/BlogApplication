@@ -6,6 +6,8 @@ import com.Blog.Payload.Request.UserRequest;
 import com.Blog.Payload.Response.UserPageResponse;
 import com.Blog.Payload.Response.UserResponse;
 
+import java.util.Map;
+
 public interface UserService {
 	UserResponse createUser(UserRequest user);
 
@@ -16,4 +18,6 @@ public interface UserService {
 	UserPageResponse getAllUsers(Integer pageNumber, Integer pageSize);
 
 	void deleteUser(Long userID) throws NotFoundException;
+  
+	Map<String, Long> getUserIdByUsernameAndPassword(String username, String password);
 }

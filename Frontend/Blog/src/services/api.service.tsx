@@ -1,14 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { apiService } from "./helper";
 export const signup$ = (formData: any) => {
-  //   return apiService.post("/api/user/", formData);
+  const { name, email, password } = formData;
+  const data = {
+    name,
+    email,
+    password,
+    about: "asdas",
+  };
+  return apiService.post("/api/user/", data);
   // dummy data
-  console.log(formData);
+  // console.log(formData);
 
   return new Promise((resolve) => {
     resolve({ data: { message: "Signup successful" } });
   });
 };
 export const login$ = (formData: any) => {
-  return apiService.post("/api/login", formData);
+  const data = {
+    username: formData.email,
+    password: formData.password,
+  };
+  return apiService.get("/api/user/login", { params: data });
 };

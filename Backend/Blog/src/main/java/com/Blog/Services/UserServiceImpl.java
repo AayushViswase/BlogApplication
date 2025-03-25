@@ -1,6 +1,7 @@
 package com.Blog.Services;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -82,6 +83,16 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 		this.userRepository.delete(user);
+	}
+
+	@Override
+	public Map<String,Long> getUserIdByUsernameAndPassword(String username, String password) {
+		try {
+			User user = userRepository.findByNameAndPassword(username, password);
+			return Map.of("userId", user.getUserId());
+		} catch (Exception e) {
+			throw new ResourceNotFoundException("User", "Username and Password"+ username ,null );
+		}
 	}
 
 }

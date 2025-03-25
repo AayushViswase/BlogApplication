@@ -62,4 +62,10 @@ public class UserController {
 	public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) throws NotFoundException {
 		return ResponseEntity.ok(this.userService.getUserById(userId));
 	}
+
+	@GetMapping("/login")
+	public ResponseEntity<Map<String,Long>> getUserByUsernameAndPassword(@RequestParam String username,
+			@RequestParam String password) {
+		return ResponseEntity.ok(this.userService.getUserIdByUsernameAndPassword(username, password));
+	}
 }
