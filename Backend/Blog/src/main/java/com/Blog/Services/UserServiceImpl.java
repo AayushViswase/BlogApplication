@@ -86,12 +86,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Map<String,Long> getUserIdByUsernameAndPassword(String username, String password) {
+	public Map<String,Long> getUserIdByUsernameAndPassword(String email, String password) {
 		try {
-			User user = userRepository.findByNameAndPassword(username, password);
+			User user = userRepository.findByEmailAndPassword(email, password);
 			return Map.of("userId", user.getUserId());
 		} catch (Exception e) {
-			throw new ResourceNotFoundException("User", "Username and Password"+ username ,null );
+			throw new ResourceNotFoundException("User", "Username and Password"+ " "+ email ,null );
 		}
 	}
 

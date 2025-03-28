@@ -16,7 +16,8 @@ export default function SideMenu() {
   };
 
   return (
-    <div className={`h-screen px-4 pt-8 pb-4 bg-light justify-between flex-col bg-gray-400 ${toggle ? "w-15" : "w-50"} duration-500`}>
+    // <div className="w-1/4 p-4 bg-gray-200">
+    <div className={`w-1/4 p-4 h-screen px-4 pt-8 pb-4 bg-light justify-between flex-col bg-gray-400 ${toggle ? "w-15" : "w-50"} duration-500`}>
       <div className="flex flex-col">
         <div className="flex flex-col relative h-full">
           <div className="flex items-center " />

@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -33,6 +34,7 @@ public class Post {
 
 	@Column(name = "post_title", length = 100, nullable = false)
 	private String title;
+	@Size(min = 0, max = 600)
 	private String content;
 	private String imageName;
 	private Date addedDate;

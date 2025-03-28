@@ -64,11 +64,12 @@ const AuthForm = () => {
     try {
       // Replace this with actual login API call
       await login$(loginFormData);
-      setLoading(false);
+      setLoading(true);
       setSnackbarMessage("Login successful! Redirecting...");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       setTimeout(() => {
+        sessionStorage.setItem("isAuthenticated", "true");
         navigate("/home");
       }, 2000);
     } catch (error) {

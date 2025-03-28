@@ -38,6 +38,8 @@ public class User {
 	@Size(min = 4, max = 10, message = "Password must be  min  of 3 char and max 10 char !!")
 	private String password;
 	@NotEmpty
+	private String role;
+	@NotEmpty
 	private String about;
 	@JsonBackReference
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

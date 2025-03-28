@@ -1,13 +1,20 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import userImage from "../assets/image.png";
+import { useNavigate } from "react-router-dom";
 
 const navigation = [
   { name: "Login", href: "/login", current: false },
   { name: "Signup", href: "/signup", current: false },
   { name: "About", href: "/about", current: false },
+  { name: "Logout", href: "/", current: false },
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    sessionStorage.setItem("isAuthenticated", "false");
+    navigate("/");
+  };
   return (
     <div>
       <nav className="bg-gray-600 ">
@@ -53,13 +60,22 @@ export default function Navbar() {
                       Settings
                     </a>
                   </MenuItem>
-                  <MenuItem>
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden">
-                      Sign out
-                    </a>
-                  </MenuItem>
                 </MenuItems>
               </Menu>
+            </div>
+            <div className="hidden sm:ml-6 sm:block">
+              <div className="flex space-x-4">
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                  }}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                >
+                  Logout
+                </a>
+              </div>
             </div>
           </div>
         </div>
