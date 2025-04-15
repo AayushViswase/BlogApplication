@@ -61,7 +61,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ comments }) => {
             },
           }}
         />
-        <SendIcon />
+        <SendIcon className="cursor-pointer"/>
       </Box>
       <CommentsDialogComponent open={dialogOpen} onClose={handleDialogClose} comments={comments} noCommentsToDisplay={0} />
     </Paper>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { posts$ } from "../services/api.service";
 import { BASE_URL } from "../services/helper";
 import CommentComponent from "./Comments";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 type PostType = {
   postId: string;
@@ -51,14 +52,19 @@ export default function Post() {
         <div className="mx-auto mt-6 max-h-full overflow-y-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-4 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {posts.map((post) => (
             <article key={post.postId} className="flex max-w-xl flex-col items-start justify-between border border-gray-200 p-4 rounded-lg shadow-sm">
-              <div className="flex items-center gap-x-4 text-xs">
-                <time dateTime={post.addedDate} className="text-gray-500">
-                  {new Date(post.addedDate).toDateString()}
-                </time>
-                <a href="#" className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
-                  {post.category.categoryTitle}
-                </a>
+              <div className="flex items-center text-xs w-full">
+                <div className="flex items-center gap-x-4 flex-grow">
+                  <time dateTime={post.addedDate} className="text-gray-500">
+                    {new Date(post.addedDate).toDateString()}
+                  </time>
+                  <a href="#" className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
+                    {post.category.categoryTitle}
+                  </a>
+                </div>
+
+                <OpenInNewIcon className="text-gray-500 hover:text-gray-700 cursor-pointer" />
               </div>
+
               <div className="group relative">
                 <h3 className="mt-3 text-lg font-semibold text-gray-900 group-hover:text-gray-600">
                   <a href="#">
