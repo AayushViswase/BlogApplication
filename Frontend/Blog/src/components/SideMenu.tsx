@@ -8,20 +8,25 @@ const menuItems = [
   { id: 4, label: "Comments", link: "/Comments" },
 ];
 
-export default function SideMenu() {
+interface SideMenuProps {
+  onToggle: (toggleState: boolean) => void;
+}
+
+export default function SideMenu({ onToggle }: SideMenuProps) {
   const [toggle, setToggle] = useState(false);
 
-  const handdleToggle = () => {
+  const handleToggle = () => {
     setToggle(!toggle);
+    onToggle(!toggle); // Notify parent about the toggle change
   };
 
   return (
     // <div className="w-1/4 p-4 bg-gray-200">
-    <div className={`w-1/4 p-4 h-screen px-4 pt-8 pb-4 bg-light justify-between flex-col bg-gray-400 ${toggle ? "w-15" : "w-50"} duration-500`}>
+    <div className={`p-4 h-screen px-4 pt-8 pb-4 bg-light justify-between flex-col bg-gray-400 ${toggle ? "w-15" : "w-50"} duration-500`}>
       <div className="flex flex-col">
         <div className="flex flex-col relative h-full">
           <div className="flex items-center " />
-          <button className=" absolute right-0 top-1/2 -translate-y-1/2" onClick={handdleToggle}>
+          <button className=" absolute right-0 top-1/2 -translate-y-1/2" onClick={handleToggle}>
             {toggle ? <MenuOpenIcon /> : <DoubleArrowIcon className="rotate-180" />}
           </button>
         </div>
