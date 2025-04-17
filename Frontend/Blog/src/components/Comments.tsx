@@ -1,9 +1,7 @@
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import SendIcon from "@mui/icons-material/Send";
 import { Box, Paper, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import CommentsListComponent from "./CommentList";
-import CommentsDialogComponent from "./CommentsDialog";
 export interface Comment {
   //   id: string;
   //   author: string;
@@ -20,9 +18,7 @@ export interface CommentComponentProps {
 }
 
 const CommentComponent: React.FC<CommentComponentProps> = ({ comments }) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
+
   return (
     <Paper elevation={2} sx={{ padding: 2, paddingTop: 1, marginTop: 2 }}>
       <Box
@@ -36,7 +32,6 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ comments }) => {
         <Typography variant="subtitle1" className="text-sm font-semibold">
           Comments
         </Typography>
-        <OpenInFullIcon sx={{ fontSize: 20, cursor: "pointer" }} onClick={handleDialogOpen} />
       </Box>
       <CommentsListComponent comments={comments} noCommentsToDisplay={2}  />
       <Box
@@ -63,7 +58,6 @@ const CommentComponent: React.FC<CommentComponentProps> = ({ comments }) => {
         />
         <SendIcon className="cursor-pointer"/>
       </Box>
-      <CommentsDialogComponent open={dialogOpen} onClose={handleDialogClose} comments={comments} noCommentsToDisplay={0} />
     </Paper>
   );
 };

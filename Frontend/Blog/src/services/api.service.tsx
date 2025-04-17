@@ -30,7 +30,6 @@ export const posts$ = () => {
 
 export const getImage$ = (imageId: string) => {
   const response = apiService.get(`/api/post/image/${imageId}`);
-  console.log("🚀 ~ response:", response);
 
   return response;
 };
