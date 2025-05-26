@@ -72,7 +72,7 @@ export default function Post() {
 
   return (
     <div className="bg-white py-4">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
           <div>
             <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">From Our Blog</h2>

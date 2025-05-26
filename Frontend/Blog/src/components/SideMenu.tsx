@@ -46,42 +46,73 @@ export default function SideMenu({ onToggle }: SideMenuProps) {
       {/* Navigation Items */}
       <div className="mt-14 flex flex-col space-y-1 px-2">
         {menuItems.map((item) => (
-          <Tooltip title={item.label  } placement="top"  disableHoverListener={!toggle}>
+          <Tooltip key={item.id} title={item.label} placement="top" disableHoverListener={!toggle}>
             <button
-              key={item.id}
               onClick={() => navigate(item.link)}
-              className={`flex items-center w-full px-4 py-2 hover:bg-gray-600 rounded-md transition ${toggle ? "justify-center" : "gap-3"}`}
+              className={`flex items-center w-full px-4 py-2 hover:bg-gray-600 rounded-md transition-all duration-500`}
             >
               <span className="min-w-[24px] flex justify-center items-center">{item.icon}</span>
-              {!toggle && <span className="whitespace-nowrap">{item.label}</span>}
+              <span
+                className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden origin-left ${
+                  toggle ? "opacity-0 scale-x-0 w-0 ml-0" : "opacity-100 scale-x-100 w-auto ml-3"
+                }`}
+              >
+                {item.label}
+              </span>
             </button>
           </Tooltip>
         ))}
       </div>
 
       {/* User Profile + Logout */}
-      <div className="px-4 pb-6">
-        <div className="flex items-center space-x-3 mb-4">
+      <div className="pl-2 pb-6">
+        {/* User Info */}
+        <div className="flex items-center mb-4 ml-2">
           <Tooltip title="Your Profile" placement="top">
             <img src={userImage} alt="User" className="rounded-full size-8 cursor-pointer" />
           </Tooltip>
-          {!toggle && <span className="text-sm font-medium">Username</span>}
-        </div>
-        <Tooltip title="Settings" placement="top" disableHoverListener={!toggle}>
-          <button
-            className={`flex items-center ${toggle ? "justify-center" : "gap-2"} w-5/6 text-sm bg-gray-800 hover:bg-gray-600 px-3 py-2 rounded transition`}
+          <div
+            className={`transition-all duration-300 ease-in-out overflow-hidden origin-left ml-3 ${
+              toggle ? "opacity-0 scale-x-0 w-0" : "opacity-100 scale-x-100 w-auto"
+            }`}
           >
-            <SettingsIcon fontSize="small" />
-            {!toggle && <span>Settings</span>}
+            <span className="text-sm font-medium">Username</span>
+          </div>
+        </div>
+        
+
+        {/* Settings Button */}
+        <Tooltip title="Settings" placement="top" disableHoverListener={!toggle}>
+          <button className="flex items-center justify-start w-5/6 text-sm bg-gray-800 hover:bg-gray-600 px-3 py-2 rounded transition-all duration-300">
+            <div className="min-w-[24px] flex justify-center">
+              <SettingsIcon fontSize="small" />
+            </div>
+            <div
+              className={`transition-all duration-300 ease-in-out overflow-hidden origin-left ml-2 ${
+                toggle ? "opacity-0 scale-x-0 w-0" : "opacity-100 scale-x-100 w-auto"
+              }`}
+            >
+              Settings
+            </div>
           </button>
         </Tooltip>
+
+        {/* Logout Button */}
         <Tooltip title="Logout" placement="top" disableHoverListener={!toggle}>
           <button
             onClick={handleLogout}
-            className={`mt-3 flex items-center ${toggle ? "justify-center" : "gap-2"} w-5/6 text-sm bg-red-600 hover:bg-red-700 px-3 py-2 rounded transition`}
+            className="mt-3 flex items-center justify-start w-5/6 text-sm bg-red-600 hover:bg-red-700 px-3 py-2 rounded transition-all duration-300"
           >
-            <LogoutIcon fontSize="small" />
-            {!toggle && <span>Logout</span>}
+            <div className="min-w-[24px] flex justify-center">
+              <LogoutIcon fontSize="small" />
+            </div>
+            <div
+              className={`transition-all duration-300 ease-in-out overflow-hidden origin-left ml-2 ${
+                toggle ? "opacity-0 scale-x-0 w-0" : "opacity-100 scale-x-100 w-auto"
+              }`}
+            >
+              Logout
+            </div>
           </button>
         </Tooltip>
       </div>
